@@ -12,6 +12,8 @@ target 'FoodTracker' do
     :hermes_enabled => false
   )
 
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
   target 'FoodTrackerTests' do
     inherit! :complete
     # Pods for testing
