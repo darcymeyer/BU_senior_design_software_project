@@ -1,5 +1,8 @@
 apply plugin: "com.android.application"
 
+// added for firebase
+apply plugin: 'com.google.gms.google-services'
+
 import com.android.build.OutputFile
 
 /**
@@ -179,6 +182,12 @@ android {
 }
 
 dependencies {
+    // added for firebase
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-functions'
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

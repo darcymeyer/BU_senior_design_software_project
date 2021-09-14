@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "948886943464",
+    "firebase_url": "https://food-tracker-d7ef5-default-rtdb.firebaseio.com",
+    "project_id": "food-tracker-d7ef5",
+    "storage_bucket": "food-tracker-d7ef5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948886943464:android:f400f24fca3b08ee32fb5d",
+        "android_client_info": {
+          "package_name": "com.foodtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948886943464-qu8dlsp8fmqh18p988j0bovl78kta2hh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWbgksvjup7L6cL1kXJuqcUIlArR_U9dQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948886943464-qu8dlsp8fmqh18p988j0bovl78kta2hh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
