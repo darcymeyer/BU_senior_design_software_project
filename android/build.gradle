@@ -7,6 +7,9 @@ buildscript {
         compileSdkVersion = 30
         targetSdkVersion = 30
         ndkVersion = "20.1.5948944"
+
+        // added for firebase auth
+        googlePlayServicesAuthVersion = "16.0.1"
     }
     repositories {
         google()
