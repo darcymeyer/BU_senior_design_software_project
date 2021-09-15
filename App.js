@@ -10,13 +10,16 @@ GoogleSignin.configure({
   webClientId: '948886943464-qu8dlsp8fmqh18p988j0bovl78kta2hh',
 });
 
-
+var userId = auth().currentUser?.uid;
 
 function GoogleSignIn() {
   return (
     <Button
       title="Google Sign-In"
-      onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
+      onPress={() => onGoogleButtonPress().then(() => {
+        userId = auth().currentUser.uid;
+        console.log('Signed in with Google! user id: ', userId);
+      })}
     />
   );
 }
@@ -33,17 +36,6 @@ async function onGoogleButtonPress() {
 }
 
 
-
-// var test;
-
-// const reference = database().ref('/test');
-// reference.once('value')
-//   .then(snapshot => {
-//     console.log('User data: ', snapshot.val());
-//     test = snapshot.val();
-//   });
-
-
 function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -54,6 +46,26 @@ function HomeScreen({ navigation }) {
       />
       {/*<Text>This is from the database: {test}</Text>*/}
       <GoogleSignIn/>
+      <Button 
+        title="console log user id"
+        onPress={() => console.log('user id:', auth().currentUser)}
+      />
+      <Button title="sign out"
+        onPress={() => {
+          auth()
+          .signOut()
+          .then(() => console.log('User signed out!'));
+        }}/>
+      <Button
+        title="console log something from database"
+        onPress={() => {
+          const reference = database().ref('/users').child(userId);
+          reference.set({'test': 'data'});
+          reference.once('value')
+            .then(snapshot => {
+              console.log('User data: ', snapshot.val());
+            });
+        }} />
     </View>
   );
 }
