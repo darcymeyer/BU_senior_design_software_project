@@ -2,41 +2,14 @@ import * as React from 'react';
 import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Add Meal"
-        onPress={() => navigation.navigate('Edit Meal')}
-      />
-    </View>
-  );
-}
-
-function EditMealScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Editing a meal</Text>
-      <Button
-        title="Add Item"
-        onPress={() => navigation.navigate('Add Item')}
-      />
-      <Button title="Save" onPress={() => navigation.navigate('Home')} />
-    </View>
-  );
-}
-
-function AddItemScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Adding an item</Text>
-      <Button title="Add" onPress={() => navigation.navigate('Edit Meal')} />
-    </View>
-  );
-}
-
+import AddItemScreen from './AddItemScreen';
+import EditMealScreen from './EditMealScreen';
+import HomeScreen from './HomeScreen';
+import LoginScreen from './LoginScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -44,6 +17,7 @@ const Stack = createNativeStackNavigator();
 function MyStack() {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Edit Meal" component={EditMealScreen} />
       <Stack.Screen name="Add Item" component={AddItemScreen} />
