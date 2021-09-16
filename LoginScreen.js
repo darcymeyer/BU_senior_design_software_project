@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import { Button, View, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -12,7 +13,7 @@ function GoogleSignIn({navigation}) {
     <Button
       title="Google Sign-In"
       onPress={() => onGoogleButtonPress().then(() => {
-        userId = auth().currentUser.uid;
+        const userId = auth().currentUser.uid;
         console.log('Signed in with Google! user id: ', userId);
         navigation.navigate("Home");
       })}
@@ -32,9 +33,11 @@ async function onGoogleButtonPress() {
 }
 
 export default function LoginScreen({ navigation, route }) {
-	if (auth().currentUser?.uid) {
-		navigation.navigate("Home");
-	}
+	useEffect(() => {
+    if (auth().currentUser?.uid) {
+        navigation.navigate("Home");
+    }
+  });
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			<Text>This is the LoginScreen</Text>
