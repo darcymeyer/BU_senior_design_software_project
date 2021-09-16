@@ -1,16 +1,53 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Button, View, Text, TextInput, FlatList, StyleSheet, ScrollView } from 'react-native';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
 
 export default function EditMealScreen({ navigation, route }) {
-  const[meal, setMeal] = React.useState('New Meal')
-  const[items, setItems] = React.useState([
-    {name: 'flour', key: '1'},
-    {name: 'sugar', key: '2'},
-    {name: 'egg', key: '3'},
-    {name: 'oil', key: '4'},
-    {name: 'cinnamon', key: '5'},
-  ]);
+  // const [meal, setMeal] = React.useState({})
+  const [mealName, setMealName] = useState("")
+  const [items, setItems] = useState({});
+  const [mealID, setMealID] = useState(route.params.mealID ?? "");
+  const userId = auth().currentUser.uid;
+  const ref = database().ref('/users').child(userId); //.child(mealID);
+  // ref.once('value').then(snapshot => {v = snapshot.val(); setMeal(v); setMealName(v.name)})
+
+  useEffect(() => {
+    if (!mealID) {
+      // var newmealid = ref.push().key;
+      // console.log('should be setting new meal id:', newmealid);
+      setMealID(ref.push().key);
+      console.log('the meal id is now:', mealID);
+      ref.child(mealID).update({items: null})
+    }
+    // setMealID("aaaaaaah");
+    console.log('the meal id is now (2):', mealID);
+    // while (!mealID) continue;
+    ref.child(mealID).once('value').then(snapshot => {
+      const v = snapshot.val();
+      setItems(v?.items ?? {});
+      if (mealName=="") setMealName(v.name);
+    })
+  });
+
+
+
+  // function updateMealName(mealName) {
+  //   ref.child(mealID).update({
+  //     name: mealName
+  //   });
+  // }
+
+  function saveMeal() {
+    ref.child(mealID).update({
+      name: mealName,
+      items: items
+    });
+  }
+
+
   return (
     <View style = {{flex: 1}}>
       <View> 
@@ -19,22 +56,35 @@ export default function EditMealScreen({ navigation, route }) {
           style = {styles.mealName}
           textAlign = 'center'
           placeholder='New Meal'
-          onChangeText={(val) => setMeal(val)}
+          value={mealName}
+          onChangeText={(val) => setMealName(val)}
         />
         
-        <Text style = { styles.label }>Meal Name</Text>
+        <Text style = { styles.label }>Meal Name: {mealName}</Text>
       </View>
       
       <Separator />
       
-      <Text style = {styles.header}>INGREDIANTS</Text>
+      <Text style = {styles.header}>INGREDIENTS</Text>
 
       <ScrollView>
 
-      { items.map((item) => {
+      { Object.entries(items ?? {}).map(([id, item]) => {
         return(
-          <View key={item.key} style = {styles.itemList}>
+          <View key={id} style = {styles.itemList}>
             <Text style={styles.itemName}>{item.name}</Text>
+            <Text>Servings:</Text>
+            <TextInput
+              value={item.servings.toString()}
+              keyboardType='numeric'
+              onChangeText={(t) => ref.child(mealID).child('items').child(id).update({servings: t})}
+            />
+            <Text>Total Calories: {item.servings * item.calories}</Text>
+            <Button
+                  key = {id}
+                  title="Remove"
+                  onPress={() => ref.child(mealID).child('items').child(id).remove()}
+                />
           </View>
         )
       })}
@@ -43,11 +93,14 @@ export default function EditMealScreen({ navigation, route }) {
       <View style = {styles.buttonView}>
       <Button
         title="Add Item"
-        onPress={() => navigation.navigate('Add Item')}
+        onPress={() => navigation.navigate('Add Item', {itemID: null, mealID: mealID})}
       />
       <Button 
         title="Save" 
-        onPress={() => navigation.navigate('Home')} />
+        onPress={() => {
+          saveMeal();
+          navigation.navigate('Home');
+        }} />
       </View>
 {/*       
       <Text>the route.params.someData var is {route.params?.someData}</Text>

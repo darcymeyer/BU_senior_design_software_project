@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Button, View, Text, StyleSheet, ScrollView } from 'react-native';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
@@ -6,14 +7,21 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 
 export default function HomeScreen({ navigation }) {
-  const[userId, setUserId] = React.useState(auth().currentUser.uid + '')
-  const[meals, setMeals] = React.useState([
-    {name: 'Chocolate Cake', key: '1'},
-    {name: 'Spaghetti & Meatballs', key: '2'},
-    {name: 'Mac & Cheese', key: '3'},
-    {name: 'Toast', key: '4'},
-    {name: 'Ham Sandwich', key: '5'},
-  ]);
+
+  const userId = auth().currentUser.uid;
+  const [meals, setMeals] = useState({});
+  // console.log('userId is', userId);
+  const ref = database().ref('/users').child(userId);
+  
+  useEffect(() => {
+    ref.once('value')
+      .then(snapshot => {
+        setMeals(snapshot.val());
+        console.log('just set meals in HomeScreen');
+        // console.log('meals', snapshot.val());
+      })
+    });
+
   return (
     
     <View style={{ flex: 1 }}>
@@ -24,14 +32,20 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.mealHeader}>Meals</Text>
         
         <ScrollView>
-          { meals.map((item) => {
+          { Object.entries(meals).map(([id,meal]) => {
             return(
-              <View key={item.key} style = {styles.mealList}>
-                <Text style={styles.mealName}>{item.name}</Text>
+              <View key={id} style = {styles.mealList}>
+                <Text style={styles.mealName}>{meal.name}</Text>
                 <Button
-                  key = {item.key}
+                  key = {id+"edit"}
                   title="Edit"
-                  onPress={() => {fetchMeals(userId); navigation.navigate('Edit Meal');}} //This also needs to load the data depending on what meal was pressed
+                  onPress={() => navigation.navigate('Edit Meal', {mealID: id})}
+                />
+                <Button
+                  key = {id+"remove"}
+                  title="Remove"
+                  onPress={() => ref.child(id).remove()}
+
                 />
               </View>
             )
@@ -43,7 +57,7 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.buttonView}>
       <Button
           title="Add Meal"
-          onPress={() => navigation.navigate('Edit Meal', {someData: "this is some data"})}
+          onPress={() => navigation.navigate('Edit Meal', {mealID: null})}
         />
       
       <Button title="sign out"
@@ -57,7 +71,7 @@ export default function HomeScreen({ navigation }) {
         title="console log user id"
         onPress={() => console.log('user id:', auth().currentUser)}
       />
-      <Button
+      {/*<Button
         title="console log something from database"
         onPress={() => {
           const reference = database().ref('/users').child(userId);
@@ -66,7 +80,7 @@ export default function HomeScreen({ navigation }) {
             .then(snapshot => {
               console.log('User data: ', snapshot.val());
             });
-        }} />
+        }} />*/}
       </View>
       
     </View>
