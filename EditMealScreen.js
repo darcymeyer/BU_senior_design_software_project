@@ -75,7 +75,7 @@ export default function EditMealScreen({ navigation, route }) {
             <Text style={styles.itemName}>{item.name}</Text>
             <Text>Servings:</Text>
             <TextInput
-              value={item.servings.toString()}
+              value={item.servings?.toString()}
               keyboardType='numeric'
               onChangeText={(t) => ref.child(mealID).child('items').child(id).update({servings: t})}
             />

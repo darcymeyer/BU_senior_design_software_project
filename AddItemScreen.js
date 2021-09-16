@@ -34,7 +34,7 @@ export default function AddItemScreen({ navigation, route }) {
         <Text>Calories: {item.calories}</Text>
       </View>
       <Button title="Add" onPress={() => {
-        ref.child('items').push().add(item);
+        ref.child('items').push().update(item);
         navigation.navigate('Edit Meal', {mealID: mealID});
       }} />
     </View>
