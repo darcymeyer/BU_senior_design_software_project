@@ -6,6 +6,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 
 export default function HomeScreen({ navigation }) {
+  const[userId, setUserId] = React.useState(auth().currentUser.uid + '')
   const[meals, setMeals] = React.useState([
     {name: 'Chocolate Cake', key: '1'},
     {name: 'Spaghetti & Meatballs', key: '2'},
@@ -30,7 +31,7 @@ export default function HomeScreen({ navigation }) {
                 <Button
                   key = {item.key}
                   title="Edit"
-                  onPress={() => navigation.navigate('Edit Meal')} //This also needs to load the data depending on what meal was pressed
+                  onPress={() => {fetchMeals(userId); navigation.navigate('Edit Meal');}} //This also needs to load the data depending on what meal was pressed
                 />
               </View>
             )
@@ -70,6 +71,11 @@ export default function HomeScreen({ navigation }) {
       
     </View>
   );
+
+  function fetchMeals(userID){
+    //This function should get the meals on this users account and populate the 'meals' state with them.
+    //It should include the barcode as the id, name, description, and calories/serving size
+  }
 }
 const Separator = () => (
   <View style={styles.separator} />
