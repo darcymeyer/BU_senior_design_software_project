@@ -18,7 +18,6 @@ export default function AddItemScreen({ navigation, route }) {
 
   return (
     <View style={styles.mainView}>
-      
       <View>
         <TextInput
           style = {styles.barcode}
@@ -27,16 +26,27 @@ export default function AddItemScreen({ navigation, route }) {
           onChangeText={(val) => {setBarcodeText(val)}}
         />
         <Text style = {styles.label}>Enter Barcode</Text>
-        <Button title="Lookup" onPress={() => {getNutrients(barcodeText).then((n) => {console.log('item should be,', n); setItem(n)})}} />
+        <Button 
+          title="Lookup" 
+          onPress={() => {
+            getNutrients(barcodeText).then((n) => {
+              console.log('item should be,', n);
+              setItem(n);
+            })
+          }}
+        />
       </View>
       <View>
         <Text>Item name: {item.name}</Text>
         <Text>Calories: {item.calories}</Text>
       </View>
-      <Button title="Add" onPress={() => {
-        ref.child('items').push().update(item);
-        navigation.navigate('Edit Meal', {mealID: mealID});
-      }} />
+      <Button 
+        title="Add"
+        onPress={() => {
+          ref.child('items').push().update(item);
+          navigation.navigate('Edit Meal', {mealID: mealID});
+        }}
+      />
     </View>
   );
 
@@ -56,16 +66,14 @@ export default function AddItemScreen({ navigation, route }) {
         if (!fdcid) {
           return ({name: 'not found', calories: 0})
         }
-        // console.log("got fdcid:", fdcid);
         return fetch(`https://api.nal.usda.gov/fdc/v1/food/${fdcid}?api_key=${api_key}`)
           .then((response) => {
             return response.json();
           })
           .then((json) => {
-            // console.log('nutrients should be:', json.labelNutrients);
             var calories = json.labelNutrients.calories.value;
             var name = json.description;
-            return {calories: calories, name: name};
+            return {calories: calories, name: name, servings: 0};
           })
           .catch((error) => {
             console.error(error);
@@ -74,13 +82,8 @@ export default function AddItemScreen({ navigation, route }) {
       .catch((error) => {
         console.error(error);
       });
+  }
 
-  }
-  
-  function addItem(id, item){
-    //This function will take the entered ID from 'id' and the fetch data stored in 'item' and add it to the database for this meal
-    //This will also need to take some indicator of what meal it is
-  }
 }
 
 
