@@ -34,7 +34,7 @@ export default function EditMealScreen({ navigation, route }) {
       { items.map((item) => {
         return(
           <View key={item.key} style = {styles.itemList}>
-            <Text>{item.name}</Text>
+            <Text style={styles.itemName}>{item.name}</Text>
           </View>
         )
       })}
@@ -80,7 +80,9 @@ const styles = StyleSheet.create({
   itemList: {
     marginTop: 5,
     padding: 10,
-    backgroundColor: 'gray',
+    borderWidth: 1,
+    borderColor: 'black',
+    backgroundColor: 'white',
     justifyContent: 'center',
     fontSize: 14
   },
@@ -103,6 +105,12 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     fontSize: 32,
     textAlign: 'center'
+  },
+  itemName:{
+    fontWeight: "900",
+    padding: 0,
+    paddingBottom: 0,
+    fontSize: 20,
   },
   label:{
     fontStyle: 'italic',
