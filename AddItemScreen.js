@@ -20,15 +20,18 @@ export default function AddItemScreen({ navigation, route }) {
     if (!itemID) setItemID(ref.push().key);
   });
 
-  
+  useEffect(() => {
+    if (route.params.barcode) setBarcodeText(route.params.barcode);
+  })
 
   return (
     <View style={styles.mainView}>
       <View>
-      <Button title="Scan" onPress={() => {navigation.navigate('Scanner')}} />
+      <Button title="Scan" onPress={() => {navigation.navigate('Scanner', {mealID: mealID})}} />
       </View>
       <View>
         <TextInput
+          value = {barcodeText}
           style = {styles.barcode}
           keyboardType='numeric'
           placeholder='############'
@@ -85,11 +88,6 @@ export default function AddItemScreen({ navigation, route }) {
 
   }
   
-  function addItem(id, item){
-    //This function will take the entered ID from 'id' and the fetch data stored in 'item' and add it to the database for this meal
-    //This will also need to take some indicator of what meal it is
-  }
-
 }
 
 
