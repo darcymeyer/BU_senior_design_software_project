@@ -10,30 +10,24 @@ export default function HomeScreen({ navigation }) {
 
   const userId = auth().currentUser.uid;
   const [meals, setMeals] = useState({});
-  // console.log('userId is', userId);
   const ref = database().ref('/users').child(userId);
   
   useEffect(() => {
     ref.once('value')
       .then(snapshot => {
         setMeals(snapshot.val());
-        console.log('just set meals in HomeScreen');
-        // console.log('meals', snapshot.val());
       })
-    });
+  });
 
   return (
-    
     <View style={{ flex: 1 }}>
-      
-      
       <View style={styles.mainView}>
         <Text style={styles.header}>Food Tracker</Text>
         <Text style={styles.mealHeader}>Meals</Text>
         
         <ScrollView>
           { Object.entries(meals).map(([id,meal]) => {
-            return(
+            return (
               <View key={id} style = {styles.mealList}>
                 <Text style={styles.mealName}>{meal.name}</Text>
                 <Button
@@ -45,7 +39,6 @@ export default function HomeScreen({ navigation }) {
                   key = {id+"remove"}
                   title="Remove"
                   onPress={() => ref.child(id).remove()}
-
                 />
               </View>
             )
@@ -55,45 +48,28 @@ export default function HomeScreen({ navigation }) {
       </View>
       
       <View style={styles.buttonView}>
-      <Button
+        <Button
           title="Add Meal"
           onPress={() => navigation.navigate('Edit Meal', {mealID: null})}
         />
-      
-      <Button title="sign out"
-        onPress={() => {
-          auth()
-          .signOut()
-          .then(() => console.log('User signed out!'))
-          .then(() => navigation.navigate('Login'));
-        }}/>
-      <Button 
-        title="console log user id"
-        onPress={() => console.log('user id:', auth().currentUser)}
-      />
-      {/*<Button
-        title="console log something from database"
-        onPress={() => {
-          const reference = database().ref('/users').child(userId);
-          reference.set({'test': 'data'});
-          reference.once('value')
-            .then(snapshot => {
-              console.log('User data: ', snapshot.val());
-            });
-        }} />*/}
+        <Button
+          title="sign out"
+          onPress={() => {
+            auth()
+            .signOut()
+            .then(() => console.log('User signed out!'))
+            .then(() => navigation.navigate('Login'));
+          }}
+        />
       </View>
-      
     </View>
   );
-
-  function fetchMeals(userID){
-    //This function should get the meals on this users account and populate the 'meals' state with them.
-    //It should include the barcode as the id, name, description, and calories/serving size
-  }
 }
+
 const Separator = () => (
   <View style={styles.separator} />
 );
+
 const styles = StyleSheet.create({
   container: {
    flex: 1,
