@@ -1,24 +1,32 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Button, View, Text, TextInput, StyleSheet } from 'react-native';
+import { Button, View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+import { QRCodeScanner } from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 
 export default function AddItemScreen({ navigation, route }) {
   const userId = auth().currentUser.uid;
   const mealID = route.params.mealID;
-  const [barcodeText, setBarcodeText] = useState('');
+  const [barcodeText, setBarcodeText] = useState(route.params.barcode);
   const [itemID, setItemID] = useState(route.params.itemID);
   const [item, setItem] = useState({name: '', calories: ''});
   const ref = database().ref('/users').child(userId).child(mealID);
-
+  const [scan, setScan] = useState(false)
+  const [result, setResult] = useState()
+  
   useEffect(() => {
     if (!itemID) setItemID(ref.push().key);
   });
 
+  
+
   return (
     <View style={styles.mainView}>
-      
+      <View>
+      <Button title="Scan" onPress={() => {navigation.navigate('Scanner')}} />
+      </View>
       <View>
         <TextInput
           style = {styles.barcode}
@@ -81,6 +89,7 @@ export default function AddItemScreen({ navigation, route }) {
     //This function will take the entered ID from 'id' and the fetch data stored in 'item' and add it to the database for this meal
     //This will also need to take some indicator of what meal it is
   }
+
 }
 
 
@@ -139,6 +148,59 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  RNcamera: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'black',
+  },
+  scrollView: {
+    
+  },
+  body: {
+    backgroundColor: 'white',
+  },
+  sectionContainer: {
+    marginTop: 32,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: 'black',
+  },
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+    color: 'orange',
+  },
+  highlight: {
+    fontWeight: '700',
+  },
+  footer: {
+    color: 'gray',
+    fontSize: 12,
+    fontWeight: '600',
+    padding: 4,
+    paddingRight: 12,
+    textAlign: 'right',
+  },
+  centerText: {
+    flex: 1,
+    fontSize: 18,
+    padding: 32,
+    color: '#777',
+  },
+  textBold: {
+    fontWeight: '500',
+    color: '#000',
+  },
+  buttonText: {
+    fontSize: 21,
+    color: 'rgb(0,122,255)',
+  },
+  buttonTouchable: {
+    padding: 16,
   },
   
 });

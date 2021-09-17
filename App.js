@@ -10,6 +10,7 @@ import AddItemScreen from './AddItemScreen';
 import EditMealScreen from './EditMealScreen';
 import HomeScreen from './HomeScreen';
 import LoginScreen from './LoginScreen';
+import ScannerScreen from './ScannerScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ function MyStack() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Edit Meal" component={EditMealScreen} />
       <Stack.Screen name="Add Item" component={AddItemScreen} />
+      <Stack.Screen name="Scanner" component={ScannerScreen} />
     </Stack.Navigator>
   );
 }

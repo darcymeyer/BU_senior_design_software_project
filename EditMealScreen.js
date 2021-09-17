@@ -93,7 +93,7 @@ export default function EditMealScreen({ navigation, route }) {
       <View style = {styles.buttonView}>
       <Button
         title="Add Item"
-        onPress={() => navigation.navigate('Add Item', {itemID: null, mealID: mealID})}
+        onPress={() => navigation.navigate('Add Item', {itemID: null, mealID: mealID, barcode: ''})}
       />
       <Button 
         title="Save" 
